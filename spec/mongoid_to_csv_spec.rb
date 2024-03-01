@@ -37,6 +37,10 @@ describe MongoidToCSV do
     csv_string.should_not include(date.to_s)
   end
 
+  it 'should only return specified fields if passed' do
+    Movie.to_csv('title').lines.first.chomp.should eq 'title'
+  end
+
   describe '#mongoid_to_csv' do
 
     it 'works on an array' do

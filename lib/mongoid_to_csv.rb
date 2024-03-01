@@ -5,15 +5,17 @@ module MongoidToCSV
 
   # Return full CSV content with headers as string.
   # Defined as class method which will have chained scopes applied.
-  def to_csv
-    documents_to_csv(all, fields)
+  def to_csv(*only_fields)
+    only_fields = fields if only_fields.empty?
+    documents_to_csv(all, only_fields)
   end
 
   module_function
 
   def documents_to_csv(documents, fields = documents.first.class.fields)
     doc_class = documents.first.class
-    csv_columns = fields.keys - %w{_id created_at updated_at _type}
+    fields = fields.keys if fields.is_a? Hash
+    csv_columns = fields - %w{_id created_at updated_at _type}
     header_row = csv_columns.to_csv
     records_rows = documents.map do |record|
       csv_columns.map do |column|
