@@ -41,6 +41,11 @@ describe MongoidToCSV do
     Movie.to_csv('title').lines.first.chomp.should eq 'title'
   end
 
+  it 'should use the requested column separator if passed' do
+    Movie.csv_separator = ';'
+    Movie.to_csv.should eq(content_of(fixtures_file('movies.csv')).gsub(',', ';'))
+  end
+
   describe '#mongoid_to_csv' do
 
     it 'works on an array' do
