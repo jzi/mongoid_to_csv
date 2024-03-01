@@ -1,9 +1,12 @@
 # Initialize/connect.
 host = 'localhost'
-port = Mongo::Connection::DEFAULT_PORT
-database_name = 'mongoid_to_csv'
-connection = Mongo::Connection.new(host, port)
-# Drop database if it exists.
-connection.drop_database(database_name)
-db = connection.db(database_name)
-Mongoid.database = db
+port = 27017
+database_name = 'mongoid_to_csv_test'
+Mongoid.configure do |c|
+  c.connect_to database_name
+  c.clients.default = {
+    hosts: ["#{host}:#{port}"],
+    database: database_name
+  }
+end
+Mongoid.purge!
